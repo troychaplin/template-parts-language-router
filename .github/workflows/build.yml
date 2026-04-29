@@ -1,0 +1,48 @@
+name: Build Test
+
+on:
+    pull_request:
+        branches: [main]
+
+jobs:
+    build:
+        name: Install dependencies and test build
+        timeout-minutes: 10
+        runs-on: 'ubuntu-latest'
+
+        env:
+            CI_JOB_NUMBER: 1
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v4
+
+            - name: Install pnpm
+              uses: pnpm/action-setup@v4
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: 'pnpm'
+
+            - name: Install dependencies
+              run: pnpm install --frozen-lockfile
+
+            - name: Lint JS & CSS
+              run: pnpm run lint:js && pnpm run lint:css
+
+            - name: Build
+              run: pnpm run build
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                  php-version: '8.2'
+                  tools: composer
+
+            - name: Install Composer dependencies
+              run: composer install --no-interaction
+
+            - name: Lint PHP
+              run: composer run lint

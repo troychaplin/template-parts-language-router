@@ -1,0 +1,48 @@
+{
+	"name": "template-parts-router",
+	"version": "0.1.0",
+	"description": "A plugin to route template parts to the appropriate template file based on the current context.",
+	"author": "Troy Chaplin",
+	"license": "GPL-2.0-or-later",
+	"main": "build/index.js",
+	"packageManager": "pnpm@10.33.0",
+	"engines": {
+		"node": ">=20.10.0"
+	},
+	"scripts": {
+		"build": "wp-scripts build --experimental-modules --blocks-manifest",
+		"lint": "pnpm run /^lint:/",
+		"format": "pnpm run /^format:/",
+		"lint:css": "wp-scripts lint-style",
+		"format:css": "wp-scripts lint-style --fix",
+		"lint:js": "wp-scripts lint-js",
+		"format:js": "wp-scripts lint-js --fix",
+		"lint:php": "composer run lint",
+		"format:php": "composer format",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip",
+		"start": "wp-scripts start --experimental-modules --blocks-manifest"
+	},
+	"devDependencies": {
+		"@wordpress/block-editor": "^15.15.0",
+		"@wordpress/blocks": "^15.15.0",
+		"@wordpress/components": "^28.0.0",
+		"@wordpress/core-data": "^7.0.0",
+		"@wordpress/data": "^10.42.0",
+		"@wordpress/dom-ready": "^4.42.0",
+		"@wordpress/element": "^6.42.0",
+		"@wordpress/html-entities": "^4.42.0",
+		"@wordpress/i18n": "^6.15.0",
+		"@wordpress/icons": "^12.0.0",
+		"@wordpress/interactivity": "^6.42.0",
+		"@wordpress/scripts": "^31.7.0"
+	},
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"core-js",
+			"core-js-pure",
+			"@parcel/watcher",
+			"unrs-resolver"
+		]
+	}
+}

@@ -1,0 +1,139 @@
+/**
+ * Tidbits – Frontend Styles
+ *
+ * CSS custom properties provide token defaults that can be
+ * overridden by the consuming theme.
+ */
+
+.tidbits {
+	--tidbits-border-color: #e5e5e5;
+	--tidbits-padding-block: 0.75rem;
+	--tidbits-term-color: inherit;
+	--tidbits-term-font-size: inherit;
+	--tidbits-term-font-weight: 600;
+	--tidbits-content-font-size: inherit;
+	--tidbits-columns-term-width: 260px;
+	--tidbits-columns-gap: 1.5rem;
+	--tidbits-accordion-speed: 0.3s;
+
+	margin: 0;
+	padding: 0;
+}
+
+/* -----------------------------------------------
+   Morsel base
+   ----------------------------------------------- */
+
+.tidbits-morsel {
+	display: grid;
+	border-bottom: 1px solid var(--tidbits-border-color);
+	padding-block: var(--tidbits-padding-block);
+
+	&:last-child {
+		border-bottom: none;
+	}
+
+	&:first-child {
+		padding-block-start: 0;
+	}
+}
+
+.tidbits-morsel__term {
+	color: var(--tidbits-term-color);
+	font-size: var(--tidbits-term-font-size);
+	font-weight: var(--tidbits-term-font-weight);
+	margin: 0;
+}
+
+.tidbits-morsel__content {
+	font-size: var(--tidbits-content-font-size);
+	margin: 0;
+	padding: 0;
+
+	> *:first-child {
+		margin-block-start: 0;
+	}
+
+	> *:last-child {
+		margin-block-end: 0;
+	}
+}
+
+/* -----------------------------------------------
+   Accordion mode
+   ----------------------------------------------- */
+
+.tidbits--accordion {
+
+	.tidbits-morsel--accordion:first-child {
+		border-top: 1px solid var(--tidbits-border-color);
+		padding-block-start: var(--tidbits-padding-block);
+	}
+}
+
+.tidbits-morsel__trigger {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	padding: 0;
+	border: none;
+	background: none;
+	font: inherit;
+	font-weight: var(--tidbits-term-font-weight);
+	color: var(--tidbits-term-color);
+	cursor: pointer;
+	text-align: start;
+	gap: 0.5rem;
+}
+
+.tidbits-morsel__title {
+	flex: 1 1 auto;
+}
+
+.tidbits-morsel__icon {
+	flex: 0 0 auto;
+	transition: transform var(--tidbits-accordion-speed) ease;
+	color: #808080;
+
+	&.is-open {
+		transform: rotate(90deg);
+	}
+}
+
+.tidbits-morsel--accordion .tidbits-morsel__content {
+	display: grid;
+	grid-template-rows: 0fr;
+	transition: grid-template-rows var(--tidbits-accordion-speed) ease;
+
+	&.is-open {
+		grid-template-rows: 1fr;
+	}
+}
+
+.tidbits-morsel__inner {
+	overflow: hidden;
+}
+
+/* -----------------------------------------------
+   Stacked mode
+   ----------------------------------------------- */
+
+.tidbits-morsel--stacked {
+	grid-template-rows: auto auto;
+	gap: 0.5rem;
+}
+
+/* -----------------------------------------------
+   Columns mode
+   ----------------------------------------------- */
+
+.tidbits-morsel--columns {
+	grid-template-columns: var(--tidbits-columns-term-width) 1fr;
+	gap: var(--tidbits-columns-gap);
+	align-items: baseline;
+
+	@media (max-width: 599px) {
+		grid-template-columns: 1fr;
+		gap: 0.5rem;
+	}
+}
