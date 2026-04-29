@@ -1,9 +1,10 @@
 <?php
 /**
- * Plugin Name:       Template Parts Router
+ * Plugin Name:       Template Parts Router for WPML
  * Description:       A plugin to route template parts to the appropriate template file based on the current context.
  * Requires at least: 6.6
  * Requires PHP:      7.0
+ * Requires Plugins:  sitepress-multilingual-cms
  * Version:           0.1.0
  * Author:            Troy Chaplin
  * License:           GPL-2.0-or-later

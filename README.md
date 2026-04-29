@@ -1,3 +1,5 @@
+<img src="assets/github-banner.jpg" alt="A file splitting off into multiple files with language references on them." style="width: 100%; height: auto;">
+
 # Template Parts Router for WPML
 
 A drop-in WordPress block that renders the right language variant of a template part based on the active WPML language — using a file-per-language convention instead of database-stored translations.
