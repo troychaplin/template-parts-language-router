@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
-        'name' => 'troychaplin/tidbits',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => null,
+        'name' => 'troychaplin/template-parts-router',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
+        'reference' => '26c5b0c9c5b4090f8e25730bcf9442ad62cfcf7d',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -46,10 +46,10 @@
             'aliases' => array(),
             'dev_requirement' => true,
         ),
-        'troychaplin/tidbits' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => null,
+        'troychaplin/template-parts-router' => array(
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
+            'reference' => '26c5b0c9c5b4090f8e25730bcf9442ad62cfcf7d',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

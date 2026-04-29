@@ -1,1 +1,0 @@
-import{getContext as t,store as s}from"@wordpress/interactivity";s("tidbits",{actions:{toggle(){const s=t();s.isOpen=!s.isOpen}}});

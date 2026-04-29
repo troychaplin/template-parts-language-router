@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit516b35aec9f6350400f53cc1ff9a7c75
+class ComposerStaticInit6111ec1cbd763291a9b34a353869694e
 {
     public static $prefixLengthsPsr4 = array (
         'P' => 
@@ -74,19 +74,17 @@ class ComposerStaticInit516b35aec9f6350400f53cc1ff9a7c75
         'PHPCSUtils\\Utils\\TypeString' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/Utils/TypeString.php',
         'PHPCSUtils\\Utils\\UseStatements' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/Utils/UseStatements.php',
         'PHPCSUtils\\Utils\\Variables' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/Utils/Variables.php',
-        'Tidbits\\Plugin_Module' => __DIR__ . '/../..' . '/classes/class-plugin-module.php',
-        'Tidbits\\Register_Blocks' => __DIR__ . '/../..' . '/classes/class-register-blocks.php',
-        'Tidbits\\Register_Flavour_Taxonomy' => __DIR__ . '/../..' . '/classes/class-register-flavour-taxonomy.php',
-        'Tidbits\\Register_Tidbit_Post_Type' => __DIR__ . '/../..' . '/classes/class-register-tidbit-post-type.php',
-        'Tidbits\\Settings_Page' => __DIR__ . '/../..' . '/classes/class-settings-page.php',
+        'Template_Parts_Router\\Plugin_Module' => __DIR__ . '/../..' . '/classes/class-plugin-module.php',
+        'Template_Parts_Router\\Register_Blocks' => __DIR__ . '/../..' . '/classes/class-register-blocks.php',
+        'Template_Parts_Router\\Render_Stack' => __DIR__ . '/../..' . '/classes/class-render-stack.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit516b35aec9f6350400f53cc1ff9a7c75::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit516b35aec9f6350400f53cc1ff9a7c75::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit516b35aec9f6350400f53cc1ff9a7c75::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6111ec1cbd763291a9b34a353869694e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6111ec1cbd763291a9b34a353869694e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6111ec1cbd763291a9b34a353869694e::$classMap;
 
         }, null, ClassLoader::class);
     }

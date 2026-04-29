@@ -36,6 +36,7 @@ if ( ! class_exists( Template_Parts_Router\Plugin_Module::class ) ) {
 
 // Instantiate modules.
 $tp_router_modules = array(
+	new Template_Parts_Router\Render_Stack(),
 	new Template_Parts_Router\Register_Blocks( __DIR__ . '/build' ),
 );
 

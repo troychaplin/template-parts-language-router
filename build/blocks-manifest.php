@@ -1,93 +1,30 @@
 <?php
 // This file is generated. Do not modify it manually.
 return array(
-	'morsel' => array(
+	'router' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'tidbits/morsel',
+		'name' => 'tp-router/router',
 		'version' => '0.1.0',
-		'title' => 'Morsel',
-		'category' => 'text',
-		'description' => 'A single Tidbit post displayed within a Tidbits block.',
-		'parent' => array(
-			'tidbits/tidbit'
-		),
+		'title' => 'Template Parts Router',
+		'category' => 'theme',
+		'icon' => 'translation',
+		'description' => 'Renders the language-suffixed variant of the surrounding template part based on the active WPML language.',
 		'attributes' => array(
-			'postId' => array(
-				'type' => 'number',
-				'default' => 0
+			'baseSlug' => array(
+				'type' => 'string',
+				'default' => ''
 			)
-		),
-		'usesContext' => array(
-			'tidbits/displayMode'
 		),
 		'supports' => array(
 			'html' => false,
+			'inserter' => true,
+			'multiple' => true,
 			'reusable' => false
 		),
-		'textdomain' => 'tidbits',
+		'textdomain' => 'tp-router',
 		'editorScript' => 'file:./index.js',
 		'editorStyle' => 'file:./index.css',
 		'render' => 'file:./render.php'
-	),
-	'tidbits' => array(
-		'$schema' => 'https://schemas.wp.org/trunk/block.json',
-		'apiVersion' => 3,
-		'name' => 'tidbits/tidbit',
-		'version' => '0.1.0',
-		'title' => 'Tidbits',
-		'category' => 'text',
-		'keywords' => array(
-			'tidbits',
-			'tips',
-			'tricks',
-			'insights',
-			'terms',
-			'definitions',
-			'glossary',
-			'facts',
-			'fun facts',
-			'quick tips',
-			'short insights'
-		),
-		'description' => 'Display hand-picked Tidbit posts in a variety of layouts.',
-		'attributes' => array(
-			'displayMode' => array(
-				'type' => 'string',
-				'default' => 'accordion',
-				'enum' => array(
-					'accordion',
-					'stacked',
-					'columns'
-				)
-			)
-		),
-		'providesContext' => array(
-			'tidbits/displayMode' => 'displayMode'
-		),
-		'supports' => array(
-			'html' => false,
-			'anchor' => true,
-			'align' => array(
-				'wide',
-				'full'
-			),
-			'layout' => array(
-				'allowEditing' => false
-			),
-			'spacing' => array(
-				'margin' => array(
-					'top',
-					'bottom'
-				),
-				'padding' => true
-			)
-		),
-		'textdomain' => 'tidbits',
-		'editorScript' => 'file:./index.js',
-		'editorStyle' => 'file:./index.css',
-		'style' => 'file:./style-index.css',
-		'render' => 'file:./render.php',
-		'viewScriptModule' => 'file:./view.js'
 	)
 );
