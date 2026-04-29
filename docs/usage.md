@@ -17,7 +17,9 @@ This guide covers everything you need to set up, use, and troubleshoot the plugi
 
 ## Installation
 
-Standard WordPress plugin install. Drop the plugin folder into `wp-content/plugins/` and activate from `Plugins → Installed Plugins`. The plugin registers a single block (`tp-router/router`) on `init` and adds two render-stack filters that fire only on the frontend.
+Standard WordPress plugin install. Drop the plugin folder into `wp-content/plugins/` and activate from `Plugins → Installed Plugins`. The plugin registers a single block (`tp-router/router`) on `init` and adds two render-stack filters (`pre_render_block` and `render_block`) that maintain context for auto-detection during `do_blocks()`.
+
+The plugin's header declares `Requires Plugins: sitepress-multilingual-cms`, so WordPress 6.5+ won't let you activate it unless WPML is also installed and active.
 
 The plugin ships with its build output (`build/`) committed, so no `npm install` or `composer install` is needed for production use. If you're hacking on the source, see the development scripts in `package.json` and `composer.json`.
 
@@ -63,6 +65,8 @@ You can also do this through the Site Editor's UI: `Patterns → Manage all temp
 After cleanup, hit a frontend URL in each language and confirm the router is doing its job (see [Troubleshooting](#troubleshooting) if not).
 
 ## The naming convention
+
+This section covers **template-part variants** (the default). Pattern variants follow a different convention — see [Pattern variants](#pattern-variants).
 
 For a template part with base slug `<base>`, create one file per language using the pattern:
 
@@ -183,7 +187,7 @@ Setting `Inserter: no` keeps the variant out of the regular block-inserter UI �
 
 ### What the editor shows
 
-For pattern variants, the inspector's "Variant source" toggle is set to **Pattern** and the editor renders the parsed pattern blocks **read-only and locked** (`templateLock: 'all'`). You see exactly what the frontend will produce, but cannot click into the blocks to edit them. To make changes, edit the pattern's PHP file and reload the editor.
+For pattern variants, the inspector's "Variant source" radio is set to **Pattern** and the editor renders the parsed pattern blocks **read-only and locked** (`templateLock: 'all'`). You see exactly what the frontend will produce, but cannot click into the blocks to edit them. To make changes, edit the pattern's PHP file and reload the editor.
 
 ### What the frontend does
 
@@ -233,6 +237,8 @@ If you've been using WPML to manage per-language template parts in the database 
 
 If you skip step 4, your files will still be overridden by the leftover database rows.
 
+If a particular slot needs PHP — i18n strings, dynamic content, asset URLs — author its variants as patterns instead and switch the corresponding router to **Variant source: Pattern**. You can mix template-part and pattern variants freely across different routers in the same theme.
+
 ## Troubleshooting
 
 ### "FR page renders an empty footer"
@@ -261,9 +267,13 @@ error_log( 'TPR resolved: ' . $base_slug . '-' . apply_filters( 'wpml_current_la
 
 Hit a FR URL and `tail -f wp-content/debug.log`. If you see `TPR resolved: footer-en` instead of `footer-fr`, the issue is that WPML isn't reporting the right language for that request. Check that WPML is fully activated, that the language switcher works for non-template content (e.g., posts), and that the URL pattern WPML expects matches the URL you're hitting. The router itself is only doing what `wpml_current_language` tells it.
 
-### "Variant file is missing — what does the user see?"
+### "Variant is missing — what does the user see?"
 
-`block_template_part( "footer-zz" )` for a non-existent slug renders nothing — no warning, no fallback. If this is a concern, you can wrap the call in a `file_exists` check and fall back to the canonical slug. The plugin doesn't do this by default to keep the resolution one-step and predictable.
+For **template-part variants**: `block_template_part( "footer-zz" )` for a non-existent slug renders nothing — no warning, no fallback.
+
+For **pattern variants**: if `WP_Block_Patterns_Registry::is_registered( '{theme}/footer-zz' )` returns false, the router renders nothing. The editor surfaces this as an explicit Placeholder ("Pattern '{slug}' not found…") because it can detect the missing pattern in the patterns store; the frontend stays silent to match the template-part behavior.
+
+If silent fallback isn't what you want, wrap the call in `render.php` to fall back to the canonical slug or a default-language variant. The plugin doesn't do this by default to keep resolution one-step and predictable.
 
 ### "Cursor jumps out of the Base Slug field"
 
@@ -281,7 +291,7 @@ WPML assigned different language codes to each, so as far as WPML was concerned 
 
 ### The block
 
-`tp-router/router` is registered via `block.json` in `src/blocks/router/`. It declares one attribute (`baseSlug`), a JS Edit component, no save output, and a server `render` reference to `render.php`.
+`tp-router/router` is registered via `block.json` in `src/blocks/router/`. It declares two attributes (`baseSlug` for the variant base, `variantType` for the source — `"template-part"` or `"pattern"`), a JS Edit component, no save output, and a server `render` reference to `render.php`.
 
 ### The frontend render
 
@@ -351,9 +361,11 @@ for ( let i = parentIds.length - 1; i >= 0; i-- ) {
 }
 ```
 
-It then constructs the entity ID as `${theme}//${base}-${previewLang}` and hands it to `useEntityBlockEditor`, which gives back `[blocks, onInput, onChange]` bound to that variant. Those go into `useInnerBlocksProps`, which renders the variant's blocks inline and saves edits back to the variant entity.
+For **template-part variants**, it constructs the entity ID as `${theme}//${base}-${previewLang}` and hands it to `useEntityBlockEditor`, which gives back `[blocks, onInput, onChange]` bound to that variant. Those go into `useInnerBlocksProps`, which renders the variant's blocks inline and saves edits back to the variant entity.
 
-The InspectorControls always renders, regardless of whether an entity has resolved, so the React tree stays stable across the placeholder→variant transition. (This was the cause of the now-fixed cursor-jump bug — see [Troubleshooting](#troubleshooting).)
+For **pattern variants**, it pulls the registered patterns via `select( coreStore ).getBlockPatterns()`, finds the one whose `name` matches `${theme}/${base}-${previewLang}`, parses its `content` string into blocks via `parse()` from `@wordpress/blocks`, and hands those blocks to `useInnerBlocksProps` with `templateLock: 'all'`. The same inline rendering, with edits locked.
+
+The InspectorControls always renders, regardless of whether an entity or pattern has resolved, so the React tree stays stable across the placeholder→variant transition. (This was the cause of the now-fixed cursor-jump bug — see [Troubleshooting](#troubleshooting).)
 
 ## Limitations
 

@@ -42,6 +42,8 @@ Template Parts Router takes the opposite approach. You keep one template part fi
 
 That's it. English visitors see `footer-en.html`; French visitors see `footer-fr.html`. No database rows, no per-language fork in the Site Editor.
 
+Need PHP in a variant — translatable strings, asset URLs, dynamic content? Switch **Variant source** to **Pattern** in the block inspector and create `patterns/footer-{lang}.php` instead. See [docs/usage.md](docs/usage.md#pattern-variants).
+
 ## How it resolves
 
 ```
@@ -52,7 +54,9 @@ parts/footer.html         ─►  <!-- wp:tp-router/router {"baseSlug":"footer"}
                           apply_filters( 'wpml_current_language', 'en' )
                                               │
                                               ▼
-                          parts/footer-{lang}.html
+                          parts/footer-{lang}.html              (default)
+                                  — or —
+                          {theme}/footer-{lang} pattern         (variantType="pattern")
 ```
 
 ## Documentation
@@ -64,6 +68,8 @@ Full setup, conventions, the editor experience, migration from WPML-managed temp
 - WordPress 6.6+
 - PHP 7.4+
 - WPML Multilingual CMS (4.6+ recommended)
+
+The plugin declares `Requires Plugins: sitepress-multilingual-cms` in its header, so WordPress 6.5+ will refuse to activate it unless WPML is installed and active.
 
 Other multilingual plugins (Polylang, TranslatePress, etc.) are not supported in this release. The router reads the language code from the `wpml_current_language` filter; adapting it to other plugins is straightforward but out of scope here.
 
