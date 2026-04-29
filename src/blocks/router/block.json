@@ -11,6 +11,10 @@
 		"baseSlug": {
 			"type": "string",
 			"default": ""
+		},
+		"variantType": {
+			"type": "string",
+			"default": "template-part"
 		}
 	},
 	"supports": {

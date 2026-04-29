@@ -19,6 +19,7 @@ Template Parts Router takes the opposite approach. You keep one template part fi
 - **Auto-detects the surrounding slot.** Inside `parts/footer.html`, the router infers `footer` automatically. Override with `baseSlug` only if you need to.
 - **Native editor preview.** Variants render inline as real, editable blocks via `useEntityBlockEditor` — the same machinery core's `core/template-part` uses. No `ServerSideRender` opaque chunk, no broken layout cascade, no thick selection outlines.
 - **Inline editing in context.** Edit the resolved variant from inside its parent template — changes save to the variant entity, exactly like core's template-part block.
+- **Pattern variants for PHP power.** Switch a router to use theme patterns instead of template parts when you need PHP — translatable strings via `__()`, dynamic content, asset URLs, conditional logic. Same routing convention; same theme-scoped, file-based mental model.
 - **Preview-language toggle.** A control in the block inspector lets you flip which variant the editor renders. The frontend always uses the actual WPML language.
 
 ## Quick start

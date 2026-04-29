@@ -28,4 +28,19 @@ if ( '' === $lang ) {
 	$lang = 'en';
 }
 
-block_template_part( "{$base_slug}-{$lang}" );
+$variant_slug = "{$base_slug}-{$lang}";
+$variant_type = (string) ( $attributes['variantType'] ?? 'template-part' );
+
+if ( 'pattern' === $variant_type ) {
+	$pattern_slug = get_stylesheet() . '/' . $variant_slug;
+	$registry     = \WP_Block_Patterns_Registry::get_instance();
+
+	if ( $registry->is_registered( $pattern_slug ) ) {
+		$pattern = $registry->get_registered( $pattern_slug );
+		echo do_blocks( $pattern['content'] );
+	}
+
+	return;
+}
+
+block_template_part( $variant_slug );

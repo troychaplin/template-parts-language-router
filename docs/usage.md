@@ -8,6 +8,7 @@ This guide covers everything you need to set up, use, and troubleshoot the plugi
 - [Required WPML setup](#required-wpml-setup)
 - [The naming convention](#the-naming-convention)
 - [Using the router block](#using-the-router-block)
+- [Pattern variants](#pattern-variants)
 - [The editor experience](#the-editor-experience)
 - [Migrating from WPML-managed template parts](#migrating-from-wpml-managed-template-parts)
 - [Troubleshooting](#troubleshooting)
@@ -115,6 +116,79 @@ The plugin maintains a render-stack of `core/template-part` blocks currently bei
 
 Set `baseSlug` explicitly even when auto-detection would work. It's clearer for whoever reads the file, makes the editor preview render the right variant on first load, and doesn't break if WordPress ever changes how template parts get rendered internally.
 
+## Pattern variants
+
+The router can render either a **template part** (default) or a **theme pattern** as the variant. The choice is per-block, controlled by the **Variant source** radio in the inspector or the `variantType` attribute (`"template-part"` or `"pattern"`).
+
+### When to choose which
+
+| | Template part variant | Pattern variant |
+|---|---|---|
+| Native PHP in the file | No (HTML only) | Yes (full PHP, including `__()`, `get_template_directory_uri()`, conditional logic) |
+| `__()` / `_e()` translations | No | Yes |
+| Dynamic content at render | No | Yes |
+| Editor preview | Native, inline | Read-only preview |
+| Click into a child block to edit | Yes — saves to the variant | No — pattern is the source of truth |
+| To edit the variant | Open the variant template part in Site Editor | Edit the PHP file in your IDE |
+| File-based / CBT-friendly | Yes | Yes |
+
+Choose **template part** when the variant is a flat block tree that translators or content editors will tweak in the Site Editor. Choose **pattern** when the variant needs PHP — typically a footer with `<?php echo date( 'Y' ); ?>`, asset URLs from `get_template_directory_uri()`, translatable strings via WordPress i18n functions, or any dynamic logic.
+
+### Naming convention for pattern variants
+
+Patterns are looked up in the **active theme's pattern registry** by slug:
+
+```
+{stylesheet}/{baseSlug}-{lang}
+```
+
+For example, with theme `idocs-block-theme`, base slug `footer`, and the FR language:
+
+```
+idocs-block-theme/footer-fr
+```
+
+Plugin-registered patterns (or patterns from any namespace other than the active theme's stylesheet) are intentionally not supported. Pattern variants are scoped to your theme.
+
+### Authoring a pattern variant
+
+Drop a PHP file in your theme's `patterns/` directory. The `Slug:` header must follow the convention above:
+
+```php
+<?php
+/**
+ * Title: Footer FR
+ * Slug: idocs-block-theme/footer-fr
+ * Inserter: no
+ */
+?>
+<!-- wp:group {"tagName":"footer", "className":"site-footer"} -->
+<footer class="wp-block-group site-footer">
+    <!-- wp:paragraph -->
+    <p>
+        <?php
+        printf(
+            /* translators: %d: current year */
+            esc_html__( '© %d International Documents Canada', 'idocs-block-theme' ),
+            (int) date( 'Y' )
+        );
+        ?>
+    </p>
+    <!-- /wp:paragraph -->
+</footer>
+<!-- /wp:group -->
+```
+
+Setting `Inserter: no` keeps the variant out of the regular block-inserter UI — these patterns aren't meant to be inserted by hand; the router renders them.
+
+### What the editor shows
+
+For pattern variants, the inspector's "Variant source" toggle is set to **Pattern** and the editor renders the parsed pattern blocks **read-only and locked** (`templateLock: 'all'`). You see exactly what the frontend will produce, but cannot click into the blocks to edit them. To make changes, edit the pattern's PHP file and reload the editor.
+
+### What the frontend does
+
+The router resolves the pattern slug, looks it up via `WP_Block_Patterns_Registry`, and renders its content with `do_blocks()`. If the pattern isn't registered, the router renders nothing — same silent behavior as a missing template-part variant.
+
 ## The editor experience
 
 ### What you see
@@ -219,13 +293,24 @@ $base_slug = '' !== ( $attributes['baseSlug'] ?? '' )
     : (string) ( \Template_Parts_Router\Render_Stack::peek() ?? '' );
 ```
 
-If empty, it returns nothing. Otherwise it reads the language and calls:
+If empty, it returns nothing. Otherwise it reads the language and dispatches by `variantType`:
 
 ```php
-block_template_part( "{$base_slug}-{$lang}" );
+$variant_slug = "{$base_slug}-{$lang}";
+
+if ( 'pattern' === $variant_type ) {
+    $pattern_slug = get_stylesheet() . '/' . $variant_slug;
+    $registry     = \WP_Block_Patterns_Registry::get_instance();
+    if ( $registry->is_registered( $pattern_slug ) ) {
+        echo do_blocks( $registry->get_registered( $pattern_slug )['content'] );
+    }
+    return;
+}
+
+block_template_part( $variant_slug );
 ```
 
-That's it. `block_template_part()` does the file/DB lookup and emits the variant's HTML.
+`block_template_part()` does the file lookup and emits the variant's HTML for template-part variants. For pattern variants, the registry lookup happens against the active theme's namespace only.
 
 ### The render stack
 
@@ -273,6 +358,8 @@ The InspectorControls always renders, regardless of whether an entity has resolv
 ## Limitations
 
 - **WPML only**, currently. Adapting the language source to Polylang or another plugin is one filter substitution in `render.php` and one selector swap in `edit.js`, but no UI is built for it in this release.
-- **No fallback chain.** If `parts/footer-fr.html` doesn't exist, nothing renders. Add a `file_exists` check in `render.php` if you need a fallback to the canonical slug.
+- **No fallback chain.** If `parts/footer-fr.html` (or `idocs-block-theme/footer-fr` for pattern variants) doesn't exist, nothing renders. Add a check in `render.php` if you need a fallback to the canonical slug.
 - **Editor preview is single-language at a time.** The Preview language input switches one variant in/out — there's no side-by-side comparison view. The frontend always reflects the actual WPML language.
 - **The plugin assumes the host template part is referenced via `core/template-part`.** If your theme calls `block_template_part()` directly from PHP (e.g., from a custom function or shortcode), the render stack may not capture the slug, and you'll need to set `baseSlug` explicitly.
+- **Pattern variants are theme-scoped.** Only patterns under your active theme's namespace (`{stylesheet}/...`) are looked up. Plugin-registered patterns are out of scope by design.
+- **Pattern variants are read-only in the editor.** Patterns aren't editable entities. To change a pattern variant, edit the PHP file directly.

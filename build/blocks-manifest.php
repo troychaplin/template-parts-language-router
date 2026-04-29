@@ -14,6 +14,10 @@ return array(
 			'baseSlug' => array(
 				'type' => 'string',
 				'default' => ''
+			),
+			'variantType' => array(
+				'type' => 'string',
+				'default' => 'template-part'
 			)
 		),
 		'supports' => array(
