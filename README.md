@@ -1,4 +1,4 @@
-<img src="./assets/github-banner.jpg" alt="A file splitting off into multiple files with language references on them." style="width: 100%; height: auto;">
+<img src="assets/github-banner.jpg" alt="A file splitting off into multiple files with language references" style="width: 100%; height: auto;">
 
 # Template Parts Router for WPML
 
