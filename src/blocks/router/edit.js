@@ -114,35 +114,38 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		</InspectorControls>
 	);
 
-	if ( ! entityId ) {
-		return (
-			<div { ...blockProps }>
-				{ inspector }
-				<Placeholder
-					label={ __(
-						'Template Parts Router',
-						'tp-router'
-					) }
-					instructions={
-						! effectiveBase
-							? __(
-									'Set a base slug in the inspector, or place this block inside a Template Part block.',
-									'tp-router'
-							  )
-							: __( 'Loading theme info…', 'tp-router' )
-					}
-				/>
-			</div>
-		);
-	}
-
+	// Keep `inspector` at a stable position in the tree across both branches
+	// so the InspectorControls portal — and the TextControls inside it —
+	// don't unmount when `entityId` resolves on the first keystroke.
 	return (
 		<>
 			{ inspector }
-			<VariantInnerBlocks
-				entityId={ entityId }
-				blockProps={ blockProps }
-			/>
+			{ ! entityId ? (
+				<div { ...blockProps }>
+					<Placeholder
+						label={ __(
+							'Template Parts Router',
+							'tp-router'
+						) }
+						instructions={
+							! effectiveBase
+								? __(
+										'Set a base slug in the inspector, or place this block inside a Template Part block.',
+										'tp-router'
+								  )
+								: __(
+										'Loading theme info…',
+										'tp-router'
+								  )
+						}
+					/>
+				</div>
+			) : (
+				<VariantInnerBlocks
+					entityId={ entityId }
+					blockProps={ blockProps }
+				/>
+			) }
 		</>
 	);
 }
