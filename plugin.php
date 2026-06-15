@@ -1,10 +1,9 @@
 <?php
 /**
- * Plugin Name:       Template Parts Router for WPML
- * Description:       A plugin to route template parts to the appropriate template file based on the current context.
+ * Plugin Name:       Template Parts Router
+ * Description:       A plugin to route template parts to the appropriate template file based on the current context. Supports WPML, Polylang, and WordPress locale.
  * Requires at least: 6.6
  * Requires PHP:      7.0
- * Requires Plugins:  sitepress-multilingual-cms
  * Version:           0.1.0
  * Author:            Troy Chaplin
  * License:           GPL-2.0-or-later
@@ -33,6 +32,32 @@ if ( ! class_exists( Template_Parts_Router\Plugin_Module::class ) ) {
 		}
 	);
 	return;
+}
+
+/**
+ * Resolves the current language for template part routing.
+ *
+ * Priority: tp_router/current_language filter → WPML → Polylang → WordPress locale.
+ * Hook `tp_router/current_language` and return a language code string to override
+ * detection entirely (useful for custom multilingual setups or testing).
+ *
+ * @return string Two-letter (or longer) language code, e.g. "en", "fr".
+ */
+function tp_router_get_current_language(): string {
+	$lang = apply_filters( 'tp_router/current_language', null );
+	if ( $lang ) {
+		return (string) $lang;
+	}
+
+	if ( defined( 'ICL_SITEPRESS_VERSION' ) ) {
+		return (string) apply_filters( 'wpml_current_language', 'en' );
+	}
+
+	if ( function_exists( 'pll_current_language' ) ) {
+		return pll_current_language() ?: 'en';
+	}
+
+	return substr( get_locale(), 0, 2 );
 }
 
 // Instantiate modules.
