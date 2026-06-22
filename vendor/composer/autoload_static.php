@@ -74,9 +74,9 @@ class ComposerStaticInit6111ec1cbd763291a9b34a353869694e
         'PHPCSUtils\\Utils\\TypeString' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/Utils/TypeString.php',
         'PHPCSUtils\\Utils\\UseStatements' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/Utils/UseStatements.php',
         'PHPCSUtils\\Utils\\Variables' => __DIR__ . '/..' . '/phpcsstandards/phpcsutils/PHPCSUtils/Utils/Variables.php',
-        'Template_Parts_Router\\Plugin_Module' => __DIR__ . '/../..' . '/classes/class-plugin-module.php',
-        'Template_Parts_Router\\Register_Blocks' => __DIR__ . '/../..' . '/classes/class-register-blocks.php',
-        'Template_Parts_Router\\Render_Stack' => __DIR__ . '/../..' . '/classes/class-render-stack.php',
+        'Template_Parts_Language_Router\\Plugin_Module' => __DIR__ . '/../..' . '/classes/class-plugin-module.php',
+        'Template_Parts_Language_Router\\Register_Blocks' => __DIR__ . '/../..' . '/classes/class-register-blocks.php',
+        'Template_Parts_Language_Router\\Render_Stack' => __DIR__ . '/../..' . '/classes/class-render-stack.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

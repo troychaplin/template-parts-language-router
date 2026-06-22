@@ -4,9 +4,9 @@ return array(
 	'router' => array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
-		'name' => 'tp-router/router',
+		'name' => 'tplr/language-router',
 		'version' => '0.1.0',
-		'title' => 'Template Parts Router',
+		'title' => 'Template Parts LanguageRouter',
 		'category' => 'theme',
 		'icon' => 'translation',
 		'description' => 'Renders the language-suffixed variant of the surrounding template part based on the active WPML language.',
@@ -26,7 +26,7 @@ return array(
 			'multiple' => true,
 			'reusable' => false
 		),
-		'textdomain' => 'tp-router',
+		'textdomain' => 'tplr',
 		'editorScript' => 'file:./index.js',
 		'editorStyle' => 'file:./index.css',
 		'render' => 'file:./render.php'

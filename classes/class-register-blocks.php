@@ -2,10 +2,10 @@
 /**
  * Register blocks from the build directory.
  *
- * @package Template_Parts_Router
+ * @package Template_Parts_Language_Router
  */
 
-namespace Template_Parts_Router;
+namespace Template_Parts_Language_Router;
 
 /**
  * Handles block registration using the blocks manifest.

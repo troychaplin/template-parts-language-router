@@ -22,7 +22,7 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="tp_router"/>
+				<element value="tplr"/>
 			</property>
 		</properties>
 	</rule>
@@ -31,7 +31,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="tp-router"/>
+				<element value="tplr"/>
 		</properties>
 	</rule>
 </ruleset>
