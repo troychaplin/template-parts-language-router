@@ -1,18 +1,3 @@
-/**
- * Edit component for `tp-router/router`.
- *
- * Resolves the surrounding template-part's slug (from a `baseSlug` attribute,
- * falling back to the nearest enclosing core/template-part block in the
- * editor) and renders the language-suffixed variant inline.
- *
- * Two variant sources are supported, switched via the `variantType` attribute:
- *   - `template-part` (default): renders the variant template part as native,
- *     editable inner blocks via `useEntityBlockEditor`. Edits save to the
- *     variant entity — same machinery core/template-part uses.
- *   - `pattern`: renders a theme pattern (slug `{theme}/{base}-{lang}`) as
- *     read-only locked inner blocks. Pattern bodies can use PHP, but cannot
- *     be edited from inside the editor.
- */
 import './editor.scss';
 
 import { __, sprintf } from '@wordpress/i18n';
@@ -138,12 +123,12 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 	// inside it) don't unmount on attribute changes.
 	const inspector = (
 		<InspectorControls>
-			<PanelBody title={ __( 'Router', 'tp-router' ) }>
+			<PanelBody title={ __( 'Router', 'tplr' ) }>
 				<TextControl
-					label={ __( 'Base slug', 'tp-router' ) }
+					label={ __( 'Base slug', 'tplr' ) }
 					value={ baseSlug }
 					placeholder={
-						detectedSlug || __( 'e.g. footer', 'tp-router' )
+						detectedSlug || __( 'e.g. footer', 'tplr' )
 					}
 					onChange={ ( value ) =>
 						setAttributes( { baseSlug: value } )
@@ -152,24 +137,24 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						! baseSlug && detectedSlug
 							? __(
 									'Auto-detected from parent template part. Set explicitly if you need editor preview outside this context.',
-									'tp-router'
+									'tplr'
 							  )
 							: __(
 									'Base slug; the language suffix is appended at render time.',
-									'tp-router'
+									'tplr'
 							  )
 					}
 				/>
 				<RadioControl
-					label={ __( 'Variant source', 'tp-router' ) }
+					label={ __( 'Variant source', 'tplr' ) }
 					selected={ variantType }
 					options={ [
 						{
-							label: __( 'Template part', 'tp-router' ),
+							label: __( 'Template part', 'tplr' ),
 							value: VARIANT_TEMPLATE_PART,
 						},
 						{
-							label: __( 'Pattern', 'tp-router' ),
+							label: __( 'Pattern', 'tplr' ),
 							value: VARIANT_PATTERN,
 						},
 					] }
@@ -180,21 +165,21 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 						variantType === VARIANT_PATTERN
 							? __(
 									'Pattern variants render read-only in the editor. Edit the pattern PHP file directly to make changes.',
-									'tp-router'
+									'tplr'
 							  )
 							: __(
 									'Template part variants are inline-editable in the editor.',
-									'tp-router'
+									'tplr'
 							  )
 					}
 				/>
 				<TextControl
-					label={ __( 'Preview language', 'tp-router' ) }
+					label={ __( 'Preview language', 'tplr' ) }
 					value={ previewLang }
 					onChange={ setPreviewLang }
 					help={ __(
 						'Editor preview only; the frontend uses the active WPML language.',
-						'tp-router'
+						'tplr'
 					) }
 				/>
 			</PanelBody>
@@ -206,14 +191,14 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 		body = (
 			<div { ...blockProps }>
 				<Placeholder
-					label={ __( 'Template Parts Router', 'tp-router' ) }
+					label={ __( 'Template Parts Language Router', 'tplr' ) }
 					instructions={
 						! effectiveBase
 							? __(
 									'Set a base slug in the inspector, or place this block inside a Template Part block.',
-									'tp-router'
+									'tplr'
 							  )
-							: __( 'Loading theme info…', 'tp-router' )
+							: __( 'Loading theme info…', 'tplr' )
 					}
 				/>
 			</div>
@@ -224,12 +209,12 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				<div { ...blockProps }>
 					<Placeholder
 						label={ __(
-							'Template Parts Router',
-							'tp-router'
+							'Template Parts Language Router',
+							'tplr'
 						) }
 						instructions={ __(
 							'Loading patterns…',
-							'tp-router'
+							'tplr'
 						) }
 					/>
 				</div>
@@ -239,14 +224,14 @@ export default function Edit( { clientId, attributes, setAttributes } ) {
 				<div { ...blockProps }>
 					<Placeholder
 						label={ __(
-							'Template Parts Router',
-							'tp-router'
+							'Template Parts Language Router',
+							'tplr'
 						) }
 						instructions={ sprintf(
 							/* translators: %s: pattern slug, e.g. "my-theme/footer-fr" */
 							__(
 								'Pattern "%s" not found. Add a patterns/<name>.php file in your theme with that Slug header.',
-								'tp-router'
+								'tplr'
 							),
 							patternName
 						) }

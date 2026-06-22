@@ -59,7 +59,7 @@ return array(
     'PHPCSUtils\\Utils\\TypeString' => $vendorDir . '/phpcsstandards/phpcsutils/PHPCSUtils/Utils/TypeString.php',
     'PHPCSUtils\\Utils\\UseStatements' => $vendorDir . '/phpcsstandards/phpcsutils/PHPCSUtils/Utils/UseStatements.php',
     'PHPCSUtils\\Utils\\Variables' => $vendorDir . '/phpcsstandards/phpcsutils/PHPCSUtils/Utils/Variables.php',
-    'Template_Parts_Router\\Plugin_Module' => $baseDir . '/classes/class-plugin-module.php',
-    'Template_Parts_Router\\Register_Blocks' => $baseDir . '/classes/class-register-blocks.php',
-    'Template_Parts_Router\\Render_Stack' => $baseDir . '/classes/class-render-stack.php',
+    'Template_Parts_Language_Router\\Plugin_Module' => $baseDir . '/classes/class-plugin-module.php',
+    'Template_Parts_Language_Router\\Register_Blocks' => $baseDir . '/classes/class-register-blocks.php',
+    'Template_Parts_Language_Router\\Render_Stack' => $baseDir . '/classes/class-render-stack.php',
 );

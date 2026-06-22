@@ -10,10 +10,10 @@
  * an explicit `baseSlug` attribute is required there. The editor's JS Edit
  * component performs an equivalent lookup via the block tree.
  *
- * @package Template_Parts_Router
+ * @package Template_Parts_Language_Router
  */
 
-namespace Template_Parts_Router;
+namespace Template_Parts_Language_Router;
 
 /**
  * Class Render_Stack
